@@ -29,9 +29,17 @@ public:
 
 	void file_read(fstream &ifs);
 	void print();
-	void print_route(int i_key);
-	void print_age(int i_key);
-	void print_race(int i_key);
+	int get_route() {
+		return i_route;
+	}
+
+	int get_year()	{
+		return i_year;
+	}
+
+	int get_race()	{
+		return i_race;
+	}
 };
 
 void driver::file_read(fstream &ifs)
@@ -55,21 +63,6 @@ void driver::print()
 	cout << "\n==============================" << endl;
 }
 
-void driver::print_route(int i_key)
-{
-	if (i_route == i_key) print();
-}
-
-void driver::print_age(int i_key)
-{
-	if ((i_key - 10) > i_year) print();
-}
-
-void driver::print_race(int i_key)
-{
-	if (i_race > i_key)	print();
-}
-
 void main()
 {
 	setlocale(LC_ALL, "russian");
@@ -83,36 +76,22 @@ void main()
 	ifs >> i_quant;
 	driver *list = new driver[i_quant];
 	for (i = 0; i < i_quant; i++) list[i].file_read(ifs);
+	for (i = 0; i < i_quant; i++) list[i].print();
 
-	for (i = 0; i < i_quant; i++)
-	{
-		list[i].print();
-	}
-
-	cout << "\n==============================\nВведите номер маршрута для вывода: ";
+	cout << "\nВведите номер маршрута для вывода: ";
 	cin >> i_key;
 	cout << "Автобусы с маршрутом " << i_key << ": ";
-	for (i = 0; i < i_quant; i++)
-	{
-		list[i].print_route(i_key);
-	}
+	for (i = 0; i < i_quant; i++) if (list[i].get_route() == i_key) list[i].print();
 
-	cout << "\n==============================\nВведите год для проверки пробега: ";
+	cout << "\nВведите год для проверки пробега: ";
 	cin >> i_key;
 	cout << "Автобусы с пробегом больше 10 лет к " << i_key << " году:";
+	for (i = 0; i < i_quant; i++) if ((i_key - 10) > list[i].get_year()) list[i].print();
 
-	for (i = 0; i < i_quant; i++)
-	{
-		list[i].print_age(i_key);
-	}
-
-	cout << "\n==============================\nВведите предел пробега (в км.): ";
+	cout << "\nВведите предел пробега (в км.): ";
 	cin >> i_key;
 	cout << "Автобусы с пробегом больше " << i_key << " км.:";
-	for (i = 0; i < i_quant; i++)
-	{
-		list[i].print_race(i_key);
-	}
+	for (i = 0; i < i_quant; i++) if (list[i].get_race() > i_key) list[i].print();
 
 	cout << endl << endl;
 	delete[] list;
